@@ -1,0 +1,7 @@
+md5: e0da818edb842a56921587750f099016
+outs:
+- md5: 6940631c528b26eed208842449cb1623.dir
+  path: uploads
+  cache: true
+  metric: false
+  persist: false
