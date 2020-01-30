@@ -6,3 +6,7 @@ tmp/*
 .env
 .DS_Store
 .idea
+
+# uploads are in DVC
+static/uploads/
+
