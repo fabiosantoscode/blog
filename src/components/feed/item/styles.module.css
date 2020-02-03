@@ -86,7 +86,7 @@
 .body {
   position: relative;
   overflow: hidden;
-  padding: 10px 30px;
+  padding: 10px 20px;
   max-height: 166px;
 
   &.overflown::after {
@@ -163,9 +163,9 @@
 
 .meta {
   position: absolute;
-  right: 30px;
+  right: 20px;
   bottom: 15px;
-  left: 30px;
+  left: 20px;
 
   @media (--md-scr) {
     .big & {

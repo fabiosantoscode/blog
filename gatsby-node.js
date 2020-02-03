@@ -91,7 +91,12 @@ exports.onPreBuild = async function({ graphql }) {
               commentsUrl
               picture {
                 childImageSharp {
-                  resize(width: 160, height: 160, fit: COVER) {
+                  resize(
+                    width: 160
+                    height: 160
+                    fit: COVER
+                    cropFocus: CENTER
+                  ) {
                     src
                   }
                 }
