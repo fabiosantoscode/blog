@@ -8,5 +8,5 @@ tmp/*
 .idea
 
 # uploads are in DVC
-static/uploads/
+/static/uploads/
 

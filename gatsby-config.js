@@ -9,6 +9,7 @@ const description =
 
 const plugins = [
   'gatsby-plugin-twitter',
+  'dvc-image-plugin', // local
   {
     resolve: 'gatsby-source-filesystem',
     options: {
