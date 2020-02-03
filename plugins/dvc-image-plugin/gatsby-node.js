@@ -50,7 +50,7 @@ exports.onPreBootstrap = async ({ actions: { createNode }, reporter }) => {
   }
 
   // Sync loop which runs in background
-  setImmediate(async () => {
+  (async () => {
     const watch = chokidar.watch([imagesPath, imagesDvcPath], {
       ignoreInitial: true
     });
@@ -72,5 +72,5 @@ exports.onPreBootstrap = async ({ actions: { createNode }, reporter }) => {
     } catch (e) {
       reporter.panic('could not sync images with DVC', e);
     }
-  });
+  })();
 };
