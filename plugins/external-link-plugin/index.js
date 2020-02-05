@@ -1,8 +1,7 @@
 const visit = require('unist-util-visit');
-const unified = require('unified');
-const parse = require('rehype-parse');
-const stringify = require('rehype-stringify');
 const { selectAll } = require('hast-util-select');
+
+const { convertHtmlToHast, convertHastToHtml } = require('../utils/convertHast');
 
 const requiredExternalLinkAttrs = ['href', 'title', 'description', 'link'];
 
@@ -31,19 +30,6 @@ function renderTag(attrs) {
       </a>
     </section>
     `;
-}
-
-/** HAST - Hypertext Abstract Syntax Tree */
-function convertHtmlToHast(htmlString) {
-  return unified()
-    .use(parse)
-    .parse(htmlString);
-}
-
-function convertHastToHtml(htmlAst) {
-  return unified()
-    .use(stringify)
-    .stringify(htmlAst);
 }
 
 module.exports = ({ markdownAST }) => {

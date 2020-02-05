@@ -70,7 +70,8 @@ projects when you run data processing or modeling code through a special
 command:
 
 ```dvc
-$ dvc run python code/xml_to_tsv.py data/Posts.xml data/Posts.tsv python
+$ dvc run python code/xml_to_tsv.py \
+                 data/Posts.xml data/Posts.tsv
 ```
 
 `dvc run` works as a proxy for your commands. This allows DVC to track input and
@@ -104,8 +105,8 @@ $ vi code/xml_to_tsv.py
 
 # Reproduce.
 $ dvc repro data/Posts-train.tsv
-Reproducing run command for data item data/Posts.tsv. Args: python code/xml_to_tsv.py data/Posts.xml data/Posts.tsv python
-Reproducing run command for data item data/Posts-train.tsv. Args: python code/split_train_test.py data/Posts.tsv 0.33 20170426 data/Posts-train.tsv data/Posts-test.tsv
+Reproducing run command for data item data/Posts.tsv.
+Reproducing run command for data item data/Posts-train.tsv.
 ```
 
 This is a powerful way of quickly iterating through your pipeline.

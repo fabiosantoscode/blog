@@ -133,20 +133,23 @@ $ dvc run Rscript code/parsingxml.R \
                   data/Posts.csv
 
 # Split training and testing dataset. Two output files.
-# 0.33 is the test dataset splitting ratio. 20170426 is a seed for randomization.
+# 0.33 is the test dataset splitting ratio.
+# 20170426 is a seed for randomization.
 $ dvc run Rscript code/train_test_spliting.R \
                   data/Posts.csv 0.33 20170426 \
                   data/train_post.csv \
                   data/test_post.csv
 
-# Extract features from text data. Two TSV inputs and two pickle matrixes outputs.
+# Extract features from text data.
+# Two TSV inputs and two pickle matrixes outputs.
 $ dvc run Rscript code/featurization.R \
                   data/train_post.csv \
                   data/test_post.csv \
                   data/matrix_train.txt \
                   data/matrix_test.txt
 
-# Train ML model out of the training dataset. 20170426 is another seed value.
+# Train ML model out of the training dataset.
+# 20170426 is another seed value.
 $ dvc run Rscript code/train_model.R \
                   data/matrix_train.txt 20170426 \
                   data/glmnet.Rdata
@@ -187,7 +190,7 @@ that we don’t have to think all the time what we need to repeat (which steps).
 
 ```dvc
 $ vi train_model.R
-$ git commit -am “Ridge penalty instead of lasso”
+$ git commit -am "Ridge penalty instead of lasso"
 $ dvc repro data/evaluation.txt
 
 Reproducing run command for data item data/glmnet.Rdata. Args: Rscript code/train_model.R data/matrix_train.txt 20170426 data/glmnet.Rdata

@@ -312,6 +312,11 @@
       line-height: 1.6em;
     }
 
+    /* DVC's command outputs are a different color */
+    code[class*="language-dvc"] {
+      color: #ccc;
+    }
+
     :global {
       .gatsby-highlight-code-line {
         display: block;
@@ -321,8 +326,18 @@
         background: #55436a;
       }
 
-      .token.line {
-        font-weight: bold;
+      .language-dvc {
+        font-weight: normal;
+
+        .token.line {
+          font-weight: bold;
+          color: #a0a0a0;
+        }
+
+        .token.comment {
+          font-weight: normal;
+          color: #a0a0a0;
+        }
       }
 
       .token.input {
@@ -375,11 +390,14 @@
         color: #0086b3;
       }
 
-      .token.git {
-        color: #0086b3;
+      .token.dvc {
+        color: #56b1d0;
       }
 
-      .token.dvc,
+      .token.git {
+        color: #e9836e;
+      }
+
       .token.command,
       .token.selector,
       .token.atrule,

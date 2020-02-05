@@ -185,7 +185,7 @@ versioning process of DVC:
   `dvc import`) , or run a command to generate files:
 
 ```dvc
-$ dvc run --out file.csv “wget https://example.com/file.csv"
+$ dvc run --out file.csv "wget https://example.com/file.csv"
 ```
 
 - This stage files are tracked by `git`

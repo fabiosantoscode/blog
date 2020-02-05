@@ -1,37 +1,22 @@
+// we require prism and load its bash module so we have
+// Prism.languages.bash to embed into our DVC language.
+
+const Prism = require('prismjs');
+require('prismjs/components/prism-bash');
+require('./dvc-hook');
+const { bash } = Prism.languages;
+
 // Command arrays are intentionally reverse sorted
 // to prevent shorter matches before longer ones
-
-const commands = [
-  'which',
-  'wget',
-  'virtualenv',
-  'vi',
-  'unzip',
-  'tree',
-  'tar',
-  'sudo',
-  'source',
-  'rm',
-  'python',
-  'pip',
-  'mkdir',
-  'md5',
-  'ls',
-  'file',
-  'export',
-  'exec',
-  'echo',
-  'du',
-  'curl',
-  'cp',
-  'cd',
-  'cat',
-  'autoload'
-];
 
 const git = [
   'tag',
   'status',
+  'remote update',
+  'remote rename',
+  'remote remove',
+  'remote add',
+  'remote',
   'push',
   'pull',
   'merge',
@@ -92,18 +77,33 @@ const dvc = [
   'add'
 ];
 
-module.exports = {
+const beforeCommand = String.raw`(\$[\s(]+|;\s*)`;
+
+Prism.languages.dvc = {
   line: {
     pattern: /(?<=(^|\n))\$[\s\S]*?[^\\](:?\n|$)/,
     inside: {
-      input: /^\$\s+/,
-      string: {
-        pattern: /(["'])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
-        greedy: true
+      dvc: {
+        pattern: new RegExp(
+          String.raw`${beforeCommand}\b(?:dvc (?:${dvc.join('|')}))\b`
+        ),
+        greedy: true,
+        lookbehind: true
       },
-      command: new RegExp(`\\b(?:${commands.join('|')})\\b`),
-      git: new RegExp(`git \\b(?:${git.join('|')})\\b`),
-      dvc: new RegExp(`dvc \\b(?:${dvc.join('|')})\\b`)
+      git: {
+        pattern: new RegExp(
+          String.raw`${beforeCommand}\b(?:git (?:${git.join('|')}))\b`
+        ),
+        greedy: true,
+        lookbehind: true
+      },
+      command: {
+        pattern: new RegExp(String.raw`${beforeCommand}\b[a-zA-Z0-9\-_]+\b`),
+        greedy: true,
+        lookbehind: true
+      },
+      ...bash
     }
-  }
+  },
+  comment: bash.comment
 };
