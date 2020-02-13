@@ -9,14 +9,16 @@
     "develop": "gatsby develop",
     "serve": "gatsby serve",
     "start": "yarn develop",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --skipLibCheck",
+    "test": "jest",
     "lint-ts": "tslint --project .",
     "lint-css": "stylelint \"src/**/*.css\"",
-    "format-all": "prettier --write './**/*.{js,jsx,md,tsx,ts,json}'"
+    "format-all": "prettier --write './**/*.{js,jsx,md,tsx,ts,json}'",
+    "check-all": "prettier --check './**/*.{js,jsx,md,tsx,ts,json}'"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && yarn typecheck && yarn test"
     }
   },
   "lint-staged": {
@@ -83,6 +85,7 @@
     "gatsby-transformer-sharp": "^2.3.13",
     "graphql": "^14.5.8",
     "husky": "^3.0.9",
+    "jest-cli": "^25.1.0",
     "lint-staged": "^9.4.2",
     "postcss-custom-media": "^7.0.8",
     "postcss-custom-properties": "^9.0.2",

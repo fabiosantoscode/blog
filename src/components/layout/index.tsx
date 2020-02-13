@@ -12,13 +12,12 @@ import styles from './styles.module.css';
 
 interface ILayoutProps {
   children: React.ReactNode;
-  index?: boolean;
 }
 
-function Layout({ children, index }: ILayoutProps) {
+function Layout({ children }: ILayoutProps) {
   return (
     <>
-      <Header index={index} />
+      <Header />
       <HamburgerMenu />
       <div className={styles.content}>{children}</div>
       <Subscribe />

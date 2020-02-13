@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const tagToSlug = require('./src/utils/tag-to-slug');
 const { createFilePath } = require('gatsby-source-filesystem');
 const { siteMetadata } = require('./gatsby-config');
 
@@ -7,6 +8,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
   const blogPost = path.resolve('./src/templates/blog-post.tsx');
+  const tagPage = path.resolve('./src/templates/tag-page.tsx');
   const result = await graphql(
     `
       {
@@ -26,6 +28,11 @@ exports.createPages = async ({ graphql, actions }) => {
             }
           }
         }
+        tags: allMarkdownRemark(limit: 999) {
+          group(field: frontmatter___tags) {
+            fieldValue
+          }
+        }
       }
     `
   );
@@ -42,13 +49,25 @@ exports.createPages = async ({ graphql, actions }) => {
     const next = index === 0 ? null : posts[index - 1].node;
 
     createPage({
-      path: post.node.fields.slug,
       component: blogPost,
       context: {
-        slug: post.node.fields.slug,
+        next,
         previous,
-        next
-      }
+        slug: post.node.fields.slug
+      },
+      path: post.node.fields.slug
+    });
+  });
+
+  const tags = result.data.tags.group;
+
+  tags.forEach(({ fieldValue: tag }) => {
+    const slug = tagToSlug(tag);
+
+    createPage({
+      component: tagPage,
+      context: { tag },
+      path: `/tags/${slug}`
     });
   });
 };
@@ -58,8 +77,8 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
   if (node.internal.type === 'MarkdownRemark') {
     const value = createFilePath({
-      node,
       getNode,
+      node,
       trailingSlash: false
     }).replace(/^\/[0-9\-]*/, '/');
     createNodeField({
@@ -133,11 +152,11 @@ exports.onPreBuild = async function({ graphql }) {
       }
 
       return {
-        url,
-        title,
-        date,
         commentsUrl,
-        pictureUrl
+        date,
+        pictureUrl,
+        title,
+        url
       };
     }
   );
@@ -147,6 +166,23 @@ exports.onPreBuild = async function({ graphql }) {
 
   // Write json file to the public dir,
   // it will be used community page later
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
   fs.writeFileSync(filepath, JSON.stringify({ posts }));
+};
+
+// Ignore warnings about CSS inclusion order, because we use CSS modules.
+// https://spectrum.chat/gatsby-js/general/having-issue-related-to-chunk-commons-mini-css-extract-plugin~0ee9c456-a37e-472a-a1a0-cc36f8ae6033?m=MTU3MjYyNDQ5OTAyNQ==
+exports.onCreateWebpackConfig = ({ stage, actions, getConfig }) => {
+  if (stage === 'build-javascript') {
+    const config = getConfig();
+    const miniCssExtractPlugin = config.plugins.find(
+      plugin => plugin.constructor.name === 'MiniCssExtractPlugin'
+    );
+    if (miniCssExtractPlugin) {
+      miniCssExtractPlugin.options.ignoreOrder = true;
+    }
+    actions.replaceWebpackConfig(config);
+  }
 };

@@ -1,5 +1,4 @@
 import cn from 'classnames';
-import Image from 'gatsby-image';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useWindowScroll, useWindowSize } from 'react-use';
@@ -7,9 +6,10 @@ import { useWindowScroll, useWindowSize } from 'react-use';
 import { IBlogPostData } from '../../templates/blog-post';
 
 import { getCommentsCount } from '../../api';
-import { siteLinks } from '../../data';
 import { pluralizeComments } from '../../utils/i18n';
+import tagToSlug from '../../utils/tag-to-slug';
 
+import Hero from '../hero';
 import Markdown from '../markdown';
 import Meta from '../meta';
 import PseudoButton from '../pseudo-button';
@@ -87,28 +87,22 @@ function Post({ html, timeToRead, frontmatter, fields }: IBlogPostData) {
           />
         </div>
       </div>
-      {picture && (
-        <>
-          <div className={styles.pictureWrapper}>
-            <Image
-              fluid={picture.childImageSharp.fluid}
-              className={styles.picture}
-            />
-          </div>
-          {pictureComment && (
-            <div className={styles.pictureComment}>{pictureComment}</div>
-          )}
-        </>
-      )}
+
+      {picture && <Hero picture={picture} pictureComment={pictureComment} />}
+
       <div className={styles.content}>
         <Markdown html={html} />
       </div>
       {tags && (
         <div className={styles.tags}>
           {tags.map(tag => (
-            <div className={styles.tag} key={tag}>
+            <a
+              href={`/tags/${tagToSlug(tag)}`}
+              className={styles.tag}
+              key={tag}
+            >
               {tag}
-            </div>
+            </a>
           ))}
         </div>
       )}

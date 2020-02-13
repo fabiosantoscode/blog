@@ -9,11 +9,7 @@ import Nav from '../nav';
 import { ReactComponent as LogoSVG } from './logo.svg';
 import styles from './styles.module.css';
 
-interface IHeaderProps {
-  index?: boolean;
-}
-
-function Header({ index }: IHeaderProps) {
+function Header() {
   const { y } = useWindowScroll();
 
   return (

@@ -1,3 +1,5 @@
+/* tslint:disable object-literal-sort-keys */
+
 const focus = {
   '&:focus': {
     color: 'var(--color-orange)',

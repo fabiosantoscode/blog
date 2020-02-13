@@ -1,7 +1,10 @@
 const visit = require('unist-util-visit');
 const { selectAll } = require('hast-util-select');
 
-const { convertHtmlToHast, convertHastToHtml } = require('../utils/convertHast');
+const {
+  convertHastToHtml,
+  convertHtmlToHast
+} = require('../utils/convertHast');
 
 const requiredExternalLinkAttrs = ['href', 'title', 'description', 'link'];
 

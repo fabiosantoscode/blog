@@ -13,13 +13,16 @@
 }
 
 .meta {
-  max-width: 650px;
   margin: 20px 0 40px;
 
   @media (--sm-scr) {
     max-width: auto;
     margin: 30px;
   }
+}
+
+.metaSlim {
+  max-width: 650px;
 }
 
 .header {
@@ -30,6 +33,8 @@
   @media (--lg-scr) {
     @mixin h1-desktop;
   }
+
+  margin: 0;
 }
 
 .lead {

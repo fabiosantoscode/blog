@@ -58,9 +58,19 @@ interface IBlogIndexProps {
 
 function BlogIndex({ data }: IBlogIndexProps) {
   return (
-    <Layout index={true}>
+    <Layout>
       <SEO title="Blog" defaultMetaTitle={true} />
-      <Feed posts={data.posts.edges} />
+      <Feed
+        feedPostList={data.posts.edges}
+        header="Data Version Control in Real Life"
+        leadParagraph={
+          <>
+            We write about machine learning workflow. From data versioning and
+            processing to model productionization. We share our news, findings,
+            interesting reads, community takeaways.
+          </>
+        }
+      />
     </Layout>
   );
 }
@@ -79,58 +89,7 @@ export const pageQuery = graphql`
       filter: { fileAbsolutePath: { regex: "/content/blog/" } }
     ) {
       edges {
-        node {
-          id
-          timeToRead
-          fields {
-            slug
-          }
-          frontmatter {
-            date(formatString: "MMM DD, YYYY")
-            title
-            description
-            descriptionLong
-            picture {
-              childImageSharp {
-                big: fluid(
-                  maxWidth: 650
-                  maxHeight: 450
-                  cropFocus: CENTER
-                  quality: 90
-                ) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-                small: fluid(
-                  maxWidth: 300
-                  maxHeight: 250
-                  cropFocus: CENTER
-                  quality: 90
-                ) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-              }
-            }
-            author {
-              childMarkdownRemark {
-                frontmatter {
-                  name
-                  avatar {
-                    childImageSharp {
-                      fixed(
-                        width: 40
-                        height: 40
-                        quality: 50
-                        cropFocus: CENTER
-                      ) {
-                        ...GatsbyImageSharpFixed_withWebp
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        ...FeedPostList
       }
     }
   }

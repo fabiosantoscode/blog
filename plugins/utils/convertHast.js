@@ -16,6 +16,6 @@ function convertHastToHtml(htmlAst) {
 }
 
 module.exports = {
-  convertHtmlToHast,
-  convertHastToHtml
-}
+  convertHastToHtml,
+  convertHtmlToHast
+};

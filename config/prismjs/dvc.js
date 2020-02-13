@@ -79,6 +79,8 @@ const dvc = [
 
 const beforeCommand = String.raw`(\$[\s(]+|;\s*)`;
 
+/* tslint:disable object-literal-sort-keys */
+
 Prism.languages.dvc = {
   line: {
     pattern: /(?<=(^|\n))\$[\s\S]*?[^\\](:?\n|$)/,

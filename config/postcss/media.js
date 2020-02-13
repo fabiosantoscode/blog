@@ -1,3 +1,5 @@
+/* tslint:disable object-literal-sort-keys */
+
 const screens = {
   giant: 1200,
   desktop: 1005,

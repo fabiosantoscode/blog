@@ -1,5 +1,5 @@
 {
-  "name": "external-resize-image-plugin",
+  "name": "resize-image-plugin",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Franco",
