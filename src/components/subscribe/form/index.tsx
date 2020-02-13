@@ -1,6 +1,28 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 
 import styles from './styles.module.css';
+
+const honeyPot = 'b_a08bf93caae4063c4e6a351f6_24c0ecc49a';
+
+interface IFormElements {
+  [honeyPot]: HTMLFormElement;
+}
+
+const sendGAEvent = ({ target: form }: FormEvent<HTMLFormElement>) => {
+  const formElements: IFormElements = (form as any).elements;
+  if (formElements[honeyPot].value) {
+    // It's a bot.
+    return;
+  }
+
+  if (typeof window.ga === 'function') {
+    window.ga('send', 'event', {
+      eventCategory: 'blog-home',
+      eventAction: 'subscribe',
+      transport: 'beacon'
+    });
+  }
+};
 
 export default function SubscribeForm() {
   return (
@@ -11,6 +33,7 @@ export default function SubscribeForm() {
       id="mc-embedded-subscribe-form"
       name="mc-embedded-subscribe-form"
       target="_blank"
+      onSubmit={sendGAEvent}
     >
       <input
         className={styles.input}
@@ -23,11 +46,7 @@ export default function SubscribeForm() {
 
       {/*real people should not fill this in and expect good things - do not remove this or risk form bot signups*/}
       <div style={{ position: 'absolute', left: '-5000px' }} aria-hidden="true">
-        <input
-          type="text"
-          name="b_a08bf93caae4063c4e6a351f6_24c0ecc49a"
-          tabIndex={-1}
-        />
+        <input type="text" name={honeyPot} tabIndex={-1} />
       </div>
 
       <button
