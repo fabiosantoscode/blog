@@ -10,7 +10,13 @@ const description =
 
 const plugins = [
   'gatsby-plugin-twitter',
-  'dvc-image-plugin', // local
+  {
+    options: {
+      imagesDvcPath: 'uploads.dvc',
+      imagesPath: 'static/uploads'
+    },
+    resolve: 'dvc-image-plugin'
+  },
   {
     options: {
       name: 'blog',

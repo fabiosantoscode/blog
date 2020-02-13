@@ -1,9 +1,6 @@
 const { spawn } = require('child_process');
 const chokidar = require('chokidar');
 
-const imagesDvcPath = 'uploads.dvc';
-const imagesPath = 'static/uploads';
-
 function run(command, ...args) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
@@ -30,20 +27,27 @@ function run(command, ...args) {
   });
 }
 
-async function pull() {
-  await run('dvc', 'pull', imagesDvcPath);
-}
+exports.onPreBootstrap = async (
+  { actions: { createNode }, reporter },
+  // Plugin options
+  { imagesDvcPath, imagesPath }
+) => {
+  async function pull() {
+    await run('dvc', 'pull', imagesDvcPath);
+  }
 
-async function push() {
-  await run('dvc', 'commit', '-f', imagesDvcPath);
-  await run('dvc', 'push', imagesDvcPath);
-}
+  async function push() {
+    await run('dvc', 'commit', '-f', imagesDvcPath);
+    await run('dvc', 'push', imagesDvcPath);
+  }
 
-exports.onPreBootstrap = async ({ actions: { createNode }, reporter }) => {
   try {
     await pull();
 
-    // TODO check if the command is "gatsby build" and return here.
+    if (process.env.CI) {
+      return;
+    }
+
     await push();
   } catch (e) {
     reporter.panic('could not perform initial sync', e);
