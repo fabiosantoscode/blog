@@ -11,7 +11,7 @@ const description =
 const plugins = [
   {
     options: {
-      cachePublic: true
+      cachePublic: false
     },
     resolve: 'gatsby-plugin-netlify-cache'
   },
