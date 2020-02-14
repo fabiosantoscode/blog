@@ -9,6 +9,12 @@ const description =
   'Data Version Control Blog. We write about machine learning workflow. From data versioning and processing to model productionization. We share our news, findings, interesting reads, community takeaways.';
 
 const plugins = [
+  {
+    options: {
+      cachePublic: true
+    },
+    resolve: 'gatsby-plugin-netlify-cache'
+  },
   'gatsby-plugin-twitter',
   {
     options: {
