@@ -5,7 +5,7 @@ const stringify = require('rehype-stringify');
 /** HAST - Hypertext Abstract Syntax Tree */
 function convertHtmlToHast(htmlString) {
   return unified()
-    .use(parse)
+    .use(parse, { fragment: true })
     .parse(htmlString);
 }
 
