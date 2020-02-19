@@ -1,4 +1,5 @@
 const path = require('path');
+const api = require('./api');
 require('./config/prismjs/dvc');
 const { imageMaxWidth } = require('./src/constants');
 
@@ -170,6 +171,9 @@ if (process.env.CONTEXT === 'production') {
 }
 
 module.exports = {
+  developMiddleware: app => {
+    app.use(api);
+  },
   plugins,
   siteMetadata: {
     description,
