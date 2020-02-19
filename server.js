@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const gatsyExpress = require('gatsby-plugin-express');
 const app = express();
 
 const api = require('./api');
