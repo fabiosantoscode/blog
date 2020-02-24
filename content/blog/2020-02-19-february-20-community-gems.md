@@ -8,7 +8,7 @@ descriptionLong: |
   and core development team.
 picture: ../../static/uploads/images/2020-02-19/feb20_gems_header_gr.png
 author: ../authors/elle_obrien.md
-commentsUrl: https://discuss.dvc.org/t/january-20-community-gems/315
+commentsUrl: https://discuss.dvc.org/t/feb-20-community-gems/330
 tags:
   - Discord
   - Google Drive
