@@ -17,7 +17,7 @@ tags:
   - Homebrew
 ---
 
-## Discord gems
+## Discord gems (another test, please, cache, work)
 
 Welcome to the Februrary roundup of useful, intriguing, and good-to-know
 discussions going on with DVC users and developers. Let's dive right in with
