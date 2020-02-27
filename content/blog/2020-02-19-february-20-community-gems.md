@@ -1,5 +1,5 @@
 ---
-title: February '20 Community Gems
+title: February '20 Community Gems (TEST 2)
 date: 2020-02-19
 description: |
   Great discussions and technical Q&A's from our users.
@@ -17,7 +17,7 @@ tags:
   - Homebrew
 ---
 
-## Discord gems
+## Discord gems (TEST 2)
 
 Welcome to the Februrary roundup of useful, intriguing, and good-to-know
 discussions going on with DVC users and developers. Let's dive right in with
