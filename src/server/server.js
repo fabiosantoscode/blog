@@ -16,7 +16,7 @@ const serve = require('serve-handler');
 const port = process.env.PORT || 9000;
 const app = express();
 
-const serveOptions = {
+const staticFilesOptions = {
   directoryListing: false,
   etag: true,
   headers: [
@@ -24,10 +24,10 @@ const serveOptions = {
       headers: [
         {
           key: 'Cache-Control',
-          value: 'public, max-age=3600'
+          value: 'public, max-age=900'
         }
       ],
-      source: '*'
+      source: '**'
     }
   ],
   public: path.join(__dirname, '../../public'),
@@ -35,7 +35,7 @@ const serveOptions = {
 };
 
 app.use((req, res) => {
-  serve(req, res, serveOptions);
+  serve(req, res, staticFilesOptions);
 });
 
 app.listen(port, e => {
