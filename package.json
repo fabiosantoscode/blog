@@ -107,5 +107,9 @@
     "tslint-react": "^4.1.0",
     "typescript": "^3.7.2"
   },
-  "cacheDirectories": ["node_modules", ".cache", "public"]
+  "cacheDirectories": [
+    "node_modules",
+    ".cache",
+    "public"
+  ]
 }
