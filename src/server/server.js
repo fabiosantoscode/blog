@@ -1,8 +1,7 @@
 /* eslint-env node */
 
 /*
- * Custom server (with custom routes) See
- * https://nextjs.org/docs/advanced-features/custom-server
+ * Production server.
  *
  * NOTE: This file doesn't go through babel or webpack. Make sure the syntax and
  * sources this file requires are compatible with the current node version you

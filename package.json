@@ -10,7 +10,7 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "start": "node ./src/server/server.js",
+    "start": "./scripts/clear-cloudflare-cache.js; node ./src/server/server.js",
     "typecheck": "tsc --noEmit --skipLibCheck",
     "test": "jest",
     "lint-ts": "tslint --project .",
@@ -52,6 +52,7 @@
     "gatsby-remark-embedder": "^1.8.0",
     "gatsby-remark-relative-images": "^0.2.3",
     "hast-util-select": "^3.0.1",
+    "node-fetch": "^2.6.0",
     "prismjs": "^1.17.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
