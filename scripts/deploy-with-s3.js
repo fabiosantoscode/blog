@@ -32,7 +32,7 @@ const syncParams = {
   localDir: publicDir,
 
   s3Params: {
-    Bucket: 'fabio-blog-dvc',
+    Bucket: 'fabio-blog-dvc-us',
     Prefix: prefix
   }
 };
