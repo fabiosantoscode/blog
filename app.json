@@ -12,6 +12,8 @@
     }
   },
   "name": "dvc-blog-production",
-  "scripts": {},
+  "scripts": {
+    "pr-predestroy": "./scripts/destroy-pr.js"
+  },
   "stack": "heroku-18"
 }
