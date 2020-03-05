@@ -14,59 +14,65 @@ const path = require('path');
 const fetch = require('node-fetch');
 const express = require('express');
 const mime = require('mime-types');
+const Wreck = require('@hapi/wreck');
 
 const app = express();
 
 const { HEROKU_PR_NUMBER, PORT = 9000, NODE_ENV } = process.env;
 
 const s3Prefix =
-  'https://fabio-blog-dvc.s3.eu-west-3.amazonaws.com/' + (
-    HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod'
-  );
+  'https://fabio-blog-dvc.s3.eu-west-3.amazonaws.com/' +
+  (HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod');
 const cacheControl = 'public, max-age=0, s-maxage=999999';
+const wreckOptions = {
+  redirects: 2,
+  timeout: 5000
+};
 
-async function serveFile(pathname, req, res) {
+async function serveFile(pathname, incomingEtag, res) {
   const target = s3Prefix + pathname;
 
-  const proxyRes = await fetch(target, {
-    method: 'GET',
-    redirect: 'follow'
-  });
+  const proxyRes = await Wreck.request('GET', target, wreckOptions);
 
-  if (!proxyRes.ok) {
-    throw new Error('Response not successful: ' + proxyRes.status);
+  const { statusCode, headers: { etag } = {} } = proxyRes;
+
+  if (statusCode !== 200) {
+    throw new Error('Response not successful: ' + statusCode);
   }
 
-  const resBlob = Buffer.from(await proxyRes.arrayBuffer());
+  if (incomingEtag && incomingEtag === etag) {
+    return res.writeHead(304, { 'cache-control': cacheControl }).end();
+  }
 
-  const etag = crypto
-    .createHash('md4')
-    .update(resBlob)
-    .digest('hex');
+  res.writeHead(200, {
+    'cache-control': cacheControl,
+    'content-type': mime.lookup(pathname) || 'text/html; charset=utf-8',
+    etag
+  });
 
-  res
-    .writeHead(200, {
-      'cache-control': cacheControl,
-      'content-type': mime.lookup(pathname) || 'text/html; charset=utf-8',
-      etag
-    })
-    .end(resBlob);
+  proxyRes.pipe(res);
 }
 
+const get = pathname =>
+  Wreck.get(s3Prefix + pathname, {
+    redirects: 2,
+    timeout: 3000
+  });
+
 app.use(async (req, res) => {
-  const { host } = req.headers;
+  const { host, 'if-none-match': incomingEtag } = req.headers;
 
   const { pathname } = url.parse(req.url);
 
   try {
-    await serveFile(pathname, req, res);
+    await serveFile(pathname, incomingEtag, res);
   } catch (e) {
     try {
       const indexFile = (pathname + '/index.html').replace(/\/+/, '/');
-      await serveFile(indexFile, req, res);
+      await serveFile(indexFile, incomingEtag, res);
     } catch (e) {
       try {
-        await serveFile('/404.html', req, res);
+        await serveFile('/404.html', incomingEtag, res);
       } catch (e) {
         res
           .status(500)

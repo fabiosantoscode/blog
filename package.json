@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "gatsby build",
-    "heroku-postbuild": "head -c 10000m /dev/urandom > file; node scripts/deploy-with-s3.js",
+    "heroku-postbuild": "node scripts/deploy-with-s3.js",
     "develop": "gatsby develop",
     "start": "./scripts/clear-cloudflare-cache.js; node ./src/server/server.js",
     "typecheck": "tsc --noEmit --skipLibCheck",
@@ -40,6 +40,7 @@
     ]
   },
   "dependencies": {
+    "@hapi/wreck": "^17.0.0",
     "@reach/portal": "^0.5.0",
     "@reach/tooltip": "^0.5.4",
     "@types/google.analytics": "^0.0.40",
