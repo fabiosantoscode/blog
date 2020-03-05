@@ -26,14 +26,14 @@ const run = command =>
 
 const cacheDir = __dirname + '/../.cache';
 const publicDir = __dirname + '/../public';
-const prefix = HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod'
+const prefix = HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod';
 
 const syncParams = {
   localDir: publicDir,
 
   s3Params: {
     Bucket: 'fabio-blog-dvc',
-    Prefix: HEROKU_APP_NAME
+    Prefix: prefix
   }
 };
 
