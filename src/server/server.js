@@ -17,10 +17,12 @@ const mime = require('mime-types');
 
 const app = express();
 
-const { HEROKU_APP_NAME, PORT = 9000, NODE_ENV } = process.env;
+const { HEROKU_PR_NUMBER, PORT = 9000, NODE_ENV } = process.env;
 
 const s3Prefix =
-  'https://fabio-blog-dvc.s3.eu-west-3.amazonaws.com/' + HEROKU_APP_NAME;
+  'https://fabio-blog-dvc.s3.eu-west-3.amazonaws.com/' + (
+    HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod'
+  );
 const cacheControl = 'public, max-age=0, s-maxage=999999';
 
 async function serveFile(pathname, req, res) {

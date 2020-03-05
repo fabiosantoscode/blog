@@ -10,7 +10,7 @@ const {
   AWS_REGION,
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
-  HEROKU_APP_NAME
+  HEROKU_PR_NUMBER
 } = process.env;
 
 const s3Client = s3.createClient({
@@ -26,6 +26,7 @@ const run = command =>
 
 const cacheDir = __dirname + '/../.cache';
 const publicDir = __dirname + '/../public';
+const prefix = HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod'
 
 const syncParams = {
   localDir: publicDir,
