@@ -8,38 +8,73 @@
  * are running.
  */
 
+const crypto = require('crypto');
+const url = require('url');
 const path = require('path');
+const fetch = require('node-fetch');
 const express = require('express');
-const serve = require('serve-handler');
+const mime = require('mime-types');
 
-const port = process.env.PORT || 9000;
 const app = express();
 
-const staticFilesOptions = {
-  directoryListing: false,
-  etag: true,
-  headers: [
-    {
-      headers: [
-        // Cache always revalidated by the client, not by the proxy
-        // (instant deploys when combined with the post-deploy purge)
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=0, s-maxage=99999'
-        }
-      ],
-      source: '**'
-    }
-  ],
-  public: path.join(__dirname, '../../public'),
-  trailingSlash: false
-};
+const { HEROKU_APP_NAME, PORT = 9000, NODE_ENV } = process.env;
 
-app.use((req, res) => {
-  serve(req, res, staticFilesOptions);
+const s3Prefix =
+  'https://fabio-blog-dvc.s3.eu-west-3.amazonaws.com/' + HEROKU_APP_NAME;
+const cacheControl = 'public, max-age=0, s-maxage=999999';
+
+async function serveFile(pathname, req, res) {
+  const target = s3Prefix + pathname;
+
+  const proxyRes = await fetch(target, {
+    method: 'GET',
+    redirect: 'follow'
+  });
+
+  if (!proxyRes.ok) {
+    throw new Error('Response not successful: ' + proxyRes.status);
+  }
+
+  const resBlob = Buffer.from(await proxyRes.arrayBuffer());
+
+  const etag = crypto
+    .createHash('md4')
+    .update(resBlob)
+    .digest('hex');
+
+  res
+    .writeHead(200, {
+      'cache-control': cacheControl,
+      'content-type': mime.lookup(pathname) || 'text/html; charset=utf-8',
+      etag
+    })
+    .end(resBlob);
+}
+
+app.use(async (req, res) => {
+  const { host } = req.headers;
+
+  const { pathname } = url.parse(req.url);
+
+  try {
+    await serveFile(pathname, req, res);
+  } catch (e) {
+    try {
+      const indexFile = (pathname + '/index.html').replace(/\/+/, '/');
+      await serveFile(indexFile, req, res);
+    } catch (e) {
+      try {
+        await serveFile('/404.html', req, res);
+      } catch (e) {
+        res
+          .status(500)
+          .end(NODE_ENV === 'production' ? 'Internal server error' : e.stack);
+      }
+    }
+  }
 });
 
-app.listen(port, e => {
+app.listen(PORT, e => {
   /* tslint:disable-next-line:no-console */
-  console.log(`Listening on http://0.0.0.0:${port}/`);
+  console.log(`Listening on http://0.0.0.0:${PORT}/`);
 });
