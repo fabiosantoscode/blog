@@ -48,15 +48,15 @@ async function main() {
   // Removing mostly for local testing of this script:
   // heroku won't have public/ lying around.
   await remove(publicDir);
-  /*
   try {
-    await syncCall('downloadDir', syncParams)
+    console.time('download from s3');
+    await syncCall('downloadDir', syncParams);
+    console.timeEnd('download from s3');
   } catch (e) {
-    console.error('Error downloading initial data')
-    console.error(e)
+    console.error('Error downloading initial data');
+    console.error(e);
     // Don't propagate. It's just a cache warming step
   }
-  */
   try {
     run('yarn build');
   } catch (e) {
@@ -67,7 +67,9 @@ async function main() {
     await remove(cacheDir);
     run('yarn build');
   }
+  console.time('upload to s3');
   await syncCall('uploadDir', syncParams);
+  console.timeEnd('upload to s3');
   await remove(publicDir);
 }
 
