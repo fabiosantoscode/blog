@@ -8,6 +8,7 @@
  * are running.
  */
 
+const fs = require('fs');
 const crypto = require('crypto');
 const url = require('url');
 const path = require('path');
@@ -28,6 +29,15 @@ const wreckOptions = {
   redirects: 2,
   timeout: 5000
 };
+const htmlType = 'text/html; charset=utf-8';
+
+let notFoundPage;
+try {
+  // in production there's no public folder
+  notFoundPage = fs.readFileSync(path.join(__dirname, '../../404.html'));
+} catch (e) {
+  notFoundPage = fs.readFileSync(path.join(__dirname, '../../public/404.html'));
+}
 
 async function serveFile(pathname, incomingEtag, res) {
   const target = s3Prefix + pathname;
@@ -46,7 +56,7 @@ async function serveFile(pathname, incomingEtag, res) {
 
   res.writeHead(200, {
     'cache-control': cacheControl,
-    'content-type': mime.lookup(pathname) || 'text/html; charset=utf-8',
+    'content-type': mime.lookup(pathname) || htmlType,
     etag
   });
 
@@ -71,13 +81,12 @@ app.use(async (req, res) => {
       const indexFile = (pathname + '/index.html').replace(/\/+/, '/');
       await serveFile(indexFile, incomingEtag, res);
     } catch (e) {
-      try {
-        await serveFile('/404.html', incomingEtag, res);
-      } catch (e) {
-        res
-          .status(500)
-          .end(NODE_ENV === 'production' ? 'Internal server error' : e.stack);
-      }
+      res
+        .writeHead(404, {
+          'cache-control': cacheControl,
+          'content-type': htmlType
+        })
+        .end(notFoundPage);
     }
   }
 });

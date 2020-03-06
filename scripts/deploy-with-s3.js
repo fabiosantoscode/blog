@@ -2,9 +2,10 @@
 
 'use strict';
 
+const path = require('path');
 const { execSync } = require('child_process');
+const { remove, move } = require('fs-extra');
 const s3 = require('s3-client');
-const { remove } = require('fs-extra');
 
 const {
   AWS_REGION,
@@ -24,16 +25,17 @@ const run = command =>
     stdio: ['pipe', process.stdout, process.stderr]
   });
 
-const cacheDir = __dirname + '/../.cache';
-const publicDir = __dirname + '/../public';
-const prefix = HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod';
+const rootDir = path.join(__dirname, '..');
+const cacheDir = path.join(rootDir, '.cache');
+const publicDir = path.join(rootDir, 'public');
+const s3Prefix = HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod';
 
 const syncParams = {
   localDir: publicDir,
 
   s3Params: {
     Bucket: 'fabio-blog-dvc-us',
-    Prefix: prefix
+    Prefix: s3Prefix
   }
 };
 
@@ -67,6 +69,7 @@ async function main() {
     await remove(cacheDir);
     run('yarn build');
   }
+  await move(path.join(publicDir, '404.html'), path.join(rootDir, '404.html'));
   console.time('upload to s3');
   await syncCall('uploadDir', syncParams);
   console.timeEnd('upload to s3');
