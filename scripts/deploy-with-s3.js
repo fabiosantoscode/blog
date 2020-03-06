@@ -5,65 +5,44 @@
 const path = require('path');
 const { execSync } = require('child_process');
 const { remove, move } = require('fs-extra');
-const s3 = require('s3-client');
-
-const {
-  AWS_REGION,
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
-  HEROKU_APP_NAME
-} = process.env;
-
-const s3Client = s3.createClient({
-  region: AWS_REGION,
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY
-});
-
-const run = command =>
-  execSync(command, {
-    stdio: ['pipe', process.stdout, process.stderr]
-  });
+const { s3Prefix, s3Bucket, s3Client } = require('./s3-utils');
 
 const rootDir = path.join(__dirname, '..');
 const cacheDir = path.join(rootDir, '.cache');
 const publicDir = path.join(rootDir, 'public');
-const s3Prefix = HEROKU_APP_NAME ? `pulls/${HEROKU_APP_NAME}` : 'prod';
 
-const s3Bucket = 'fabio-blog-dvc-us';
+function run(command) {
+  execSync(command, {
+    stdio: ['pipe', process.stdout, process.stderr]
+  });
+}
 
-console.log({
-  AWS_REGION,
-  HEROKU_APP_NAME,
-  s3Bucket,
-  s3Prefix,
-  hasCreds: Boolean(AWS_ACCESS_KEY_ID && AWS_SECRET_ACCESS_KEY)
-});
-
-const syncCall = (method, ...args) =>
-  new Promise((resolve, reject) => {
+function syncCall(method, ...args) {
+  console.log('sync:', method);
+  return new Promise((resolve, reject) => {
     const synchroniser = s3Client[method](...args);
     synchroniser.on('error', reject);
     synchroniser.on('end', resolve);
   });
+}
 
 async function prefixIsEmpty(prefix) {
   try {
-    await s3.headObject({
-      Bucket: s3Bucket,
-      Prefix: prefix + '/index.html'
-    });
+    await s3Client.s3
+      .headObject({
+        Bucket: s3Bucket,
+        Prefix: prefix + '/index.html'
+      })
+      .promise();
+    return false;
   } catch (e) {
     return true;
   }
-  return false;
 }
 
 async function downloadFromS3(prefix) {
-  // Removing mostly for local testing of this script:
-  // heroku won't have public/ lying around.
-  // await remove(publicDir);
   try {
+    console.log(`downloading public/ from s3://${s3Bucket}/${prefix}`);
     console.time('download from s3');
     await syncCall('downloadDir', {
       localDir: publicDir,
