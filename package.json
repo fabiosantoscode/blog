@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "gatsby build",
-    "heroku-postbuild": "node scripts/deploy-with-s3.js",
+    "heroku-postbuild": "echo BUILD ENV:; env; node scripts/deploy-with-s3.js",
     "develop": "gatsby develop",
     "start": "./scripts/clear-cloudflare-cache.js; node ./src/server/server.js",
     "typecheck": "tsc --noEmit --skipLibCheck",
