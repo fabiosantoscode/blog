@@ -11,7 +11,7 @@ const {
   AWS_REGION,
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
-  HEROKU_PR_NUMBER
+  HEROKU_APP_NAME
 } = process.env;
 
 const s3Client = s3.createClient({
@@ -28,13 +28,13 @@ const run = command =>
 const rootDir = path.join(__dirname, '..');
 const cacheDir = path.join(rootDir, '.cache');
 const publicDir = path.join(rootDir, 'public');
-const s3Prefix = HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod';
+const s3Prefix = HEROKU_APP_NAME ? `pulls/${HEROKU_APP_NAME}` : 'prod';
 
 const s3Bucket = 'fabio-blog-dvc-us';
 
 console.log({
   AWS_REGION,
-  HEROKU_PR_NUMBER,
+  HEROKU_APP_NAME,
   s3Bucket,
   s3Prefix,
   hasCreds: Boolean(AWS_ACCESS_KEY_ID && AWS_SECRET_ACCESS_KEY)
@@ -110,7 +110,9 @@ async function main() {
     await remove(publicDir);
     run('yarn build');
   }
-  await move(path.join(publicDir, '404.html'), path.join(rootDir, '404.html'));
+  await move(path.join(publicDir, '404.html'), path.join(rootDir, '404.html'), {
+    overwrite: true
+  });
   await uploadToS3();
   await remove(publicDir);
 }

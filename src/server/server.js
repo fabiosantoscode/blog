@@ -19,11 +19,11 @@ const Wreck = require('@hapi/wreck');
 
 const app = express();
 
-const { HEROKU_PR_NUMBER, PORT = 9000, NODE_ENV } = process.env;
+const { HEROKU_APP_NAME, PORT = 9000, NODE_ENV } = process.env;
 
 const s3Prefix =
   'https://fabio-blog-dvc-us.s3.us-west-1.amazonaws.com/' +
-  (HEROKU_PR_NUMBER ? `pulls/${HEROKU_PR_NUMBER}` : 'prod');
+  (HEROKU_APP_NAME ? `pulls/${HEROKU_APP_NAME}` : 'prod');
 const cacheControl = 'public, max-age=0, s-maxage=999999';
 const wreckOptions = {
   redirects: 2,
