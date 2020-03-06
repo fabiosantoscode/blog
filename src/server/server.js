@@ -39,7 +39,7 @@ try {
   notFoundPage = fs.readFileSync(path.join(__dirname, '../../public/404.html'));
 }
 
-async function serveFile(pathname, incomingEtag, res) {
+async function serveFile(pathname, res) {
   const target = s3Prefix + pathname;
 
   const proxyRes = await Wreck.request('GET', target, wreckOptions);
@@ -48,10 +48,6 @@ async function serveFile(pathname, incomingEtag, res) {
 
   if (statusCode !== 200) {
     throw new Error('Response not successful: ' + statusCode);
-  }
-
-  if (incomingEtag && incomingEtag === etag) {
-    return res.writeHead(304, { 'cache-control': cacheControl }).end();
   }
 
   res.writeHead(200, {
@@ -70,16 +66,14 @@ const get = pathname =>
   });
 
 app.use(async (req, res) => {
-  const { host, 'if-none-match': incomingEtag } = req.headers;
-
   const { pathname } = url.parse(req.url);
 
   try {
-    await serveFile(pathname, incomingEtag, res);
+    await serveFile(pathname, res);
   } catch (e) {
     try {
       const indexFile = (pathname + '/index.html').replace(/\/+/, '/');
-      await serveFile(indexFile, incomingEtag, res);
+      await serveFile(indexFile, res);
     } catch (e) {
       res
         .writeHead(404, {
