@@ -3,7 +3,7 @@ title: March '20 DVC❤️Heartbeat
 date: 2020-03-11
 description: |
   DVC discussions around the web,
-  our growing team, and reading recommendations from the open source communitys.
+  our growing team, and recommended reading from the open source community.
 descriptionLong: |
   Every month we share news, findings, interesting reads, community takeaways,
   and everything else along the way.
@@ -98,10 +98,11 @@ link="packtpub.com"
 image="/uploads/images/2020-03-11/packt.jpeg"/>
 
 Last year in Mexico, DVC contributor [Ramón Valles](https://github.com/mroutis)
-gave a talk about reproducible machine learning workflows at Data Day Monterrey-
-and [a video of his presentation](https://www.youtube.com/watch?v=tAxG-n20Di4)
-is now online! In this Spanish-language talk, Ramón gives a thorough look at
-DVC, particularly building pipelines for reproducible ML.
+gave a talk about reproducible machine learning workflows at Data Day
+Monterrey—and
+[a video of his presentation](https://www.youtube.com/watch?v=tAxG-n20Di4) is
+now online! In this Spanish-language talk, Ramón gives a thorough look at DVC,
+particularly building pipelines for reproducible ML.
 
 <external-link
 href="https://www.youtube.com/watch?v=tAxG-n20Di4"
@@ -123,7 +124,7 @@ description="Delve into an open natural language dataset of posts about moral di
 link="blog.dvc.org"
 image="/uploads/images/2020-03-11/aita_sm.png"/>
 
-That's all for now- thanks for reading, and be in touch on our
+That's all for now—thanks for reading, and be in touch on our
 [GitHub](https://github.com/iterative/dvc),
 [Twitter](https://twitter.com/dvcorg), and
 [Discord channel](https://dvc.org/chat).
