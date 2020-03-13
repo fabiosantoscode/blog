@@ -11,15 +11,16 @@ descriptionLong: |
   Look here for updates about [DVC](https://dvc.org), our journey as a startup,
   projects by our users and big ideas about best practices in ML and data
   science.
-picture: ../../static/uploads/images/2020-03-11/march_cover.png
+picture: ../../static/uploads/images/2020-03-11/March_20_HB_header.png
 pictureComment:
 author: ../authors/elle_obrien.md
-commentsUrl: https://discuss.dvc.org/t/dvc-heartbeat-feburary-20/318
+commentsUrl: https://discuss.dvc.org/t/march-20-heartbeat/335
 tags:
   - Heartbeat
-  - Continuous Integration
+  - CI/CD
   - Book
-  - Data Science
+  - Monorepo
+  - New feature
 ---
 
 Welcome to the March Heartbeat! Here are some highlights from our team and
@@ -32,7 +33,15 @@ community this past month:
 contributed to the core DVC code base and brings several years of full-stack
 engineering expertise to the team. Welcome, Guro!
 
-[AWAITING PICTURE FROM GURO]
+![](/uploads/images/2020-03-11/hi_guro.png 'Img=500x667')_Welcome, Guro!_
+
+**New feature alert.** We've received many requests for
+[monorepo](https://en.wikipedia.org/wiki/Monorepo) support in DVC. As of DVC
+[release 0.87.0](https://github.com/iterative/dvc/releases), users can version
+data science projects within a monorepo! The new `dvc init --subdir`
+functionality is designed to allow multiple DVC repositories within a single Git
+repository. Don't forget to upgrade and
+[check out the latest docs](https://dvc.org/doc/command-reference/init).
 
 ## From the community
 
@@ -48,7 +57,7 @@ helmed by software developer and DVC contributor
 
 Another discussion we appreciated happened on Twitter:
 
-https://twitter.com/cyberomin/status/1223651811082559488
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">We give tools like Slack and Zoom a lot of credit for making remote work possible, and I think Git and every hosted DVC system should equally get the same credit. Imagine life for a second without version control. Think about that.</p>&mdash; Celestine (@cyberomin) <a href="https://twitter.com/cyberomin/status/1223651811082559488?ref_src=twsrc%5Etfw">February 1, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 Thanks, [@cyberomin](https://twitter.com/cyberomin)!
 
