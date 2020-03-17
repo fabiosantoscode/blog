@@ -20,7 +20,7 @@
 
 const path = require('path');
 const { execSync } = require('child_process');
-const { remove, move } = require('fs-extra');
+const { remove, move, ensureDir } = require('fs-extra');
 const { s3Prefix, s3Bucket, s3Client } = require('./s3-utils');
 
 const rootDir = path.join(__dirname, '..');
@@ -57,13 +57,19 @@ async function prefixIsEmpty(prefix) {
 
 async function downloadFromS3(prefix) {
   try {
-    console.log(`downloading public/ from s3://${s3Bucket}/${prefix}`);
+    const staticDir = path.join(publicDir, 'static');
+    const staticPrefix = prefix + '/static';
+    await ensureDir(staticDir);
+
+    console.log(
+      `downloading public/static from s3://${s3Bucket}/${staticPrefix}`
+    );
     console.time('download from s3');
     await syncCall('downloadDir', {
-      localDir: publicDir,
+      localDir: staticDir,
       s3Params: {
         Bucket: s3Bucket,
-        Prefix: prefix
+        Prefix: staticPrefix
       }
     });
     console.timeEnd('download from s3');
