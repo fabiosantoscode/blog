@@ -22,7 +22,8 @@ Here are some Q&A's from our Discord channel that we think are worth sharing.
 
 ### Q: I have several simulations organized with Git tags. I know I can compare the metrics with `dvc metrics diff [a_rev] [b_rev]`, substituting hashes, branches, or tags for [a_rev] and [b_rev]. [But what if I wanted to see the metrics for a list of tags?](https://discordapp.com/channels/485586884165107732/563406153334128681/687634347104403528)
 
-DVC has a built in function for this! You can use `dvc metrics show` with the `-T` option:
+DVC has a built in function for this! You can use `dvc metrics show` with the
+`-T` option:
 
 ```dvc
 $ dvc metrics show -T
@@ -58,7 +59,8 @@ there be multiple DVC projects within a single Git repository. Now, if a DVC
 repository doesn't contain a `.git` directory, DVC expects the `no_scm` flag to
 be present in `.dvc/config` and raises an error if not. For example, one of our
 users reported this when using DVC to pull files into a Docker container that
-didn't have Git initialized.
+didn't have Git initialized (for more about using DVC without Git,
+[see our docs](https://dvc.org/doc/command-reference/init#initializing-dvc-without-git)).
 
 You can fix this by running `dvc config core.no_scm true` (you could include
 this command in the script that creates Docker images). Alternately, you could
@@ -73,10 +75,9 @@ this particular issue so stay tuned.
 
 Yes, `dvc repro` has a flag that should help here. You can use the `-f` or
 `--force` flag to reproduce the pipeline even when no changes in the
-dependencies (for example, a training datset tracked by DVC) have been found. 
-So if you had a hypoethetical DVC pipeline whose
-final process was `deploy.dvc`, you could run `dvc repro -f deploy.dvc` to rerun
-the whole pipeline.
+dependencies (for example, a training datset tracked by DVC) have been found. So
+if you had a hypoethetical DVC pipeline whose final process was `deploy.dvc`,
+you could run `dvc repro -f deploy.dvc` to rerun the whole pipeline.
 
 ### Q: What's the best way to orgnize DVC repositories if I have several training datasets shared by several projects? Some projects use only one dataset while other use several. [Can one project have `.dvc` files corresponding to different remotes?](https://discordapp.com/channels/485586884165107732/563406153334128681/670664813973864449)
 
@@ -98,7 +99,7 @@ collect is extremely limited and anonymized, as it is collected mainly for the
 purpose of prioritizing bugs and feature development based on DVC usage. For
 example, we collect info about your operating system, DVC version, and
 installation method (the
-[complete list of collected features is here](https://dvc.org/doc/user-guide/analytics#what).
+[complete list of collected features is here](https://dvc.org/doc/user-guide/analytics#what)).
 
 Many of our users work with sensitive or private data, and we've developed DVC
 with such scenarios in mind from day one.
@@ -112,15 +113,17 @@ references aren't yet solidified. So while there isn't (_yet_) a standard recipe
 for using DVC in MLOps projects, we can point you to a few architectures we
 like, and which have been reported in sufficient detail to recreate.
 
-First, DVC can be used to detect events (such as dataset changes) in a CI/CD 
-system that traditional version control systems might not be able to.  
-An excellent and thorough [blog by Danilo Sato et al.](https://martinfowler.com/articles/cd4ml.html)
+First, DVC can be used to detect events (such as dataset changes) in a CI/CD
+system that traditional version control systems might not be able to. An
+excellent and thorough
+[blog by Danilo Sato et al.](https://martinfowler.com/articles/cd4ml.html)
 explores using DVC in this way, as part of a CI/CD system that retrains a model
-automatically when changes in the dataset are detected. 
+automatically when changes in the dataset are detected.
 
-Second, DVC can be used to support model training on cloud GPUs, particularly as a tool
-for pushing and pulling files (such as datasets and trained models) between cloud computing instances,
-DVC repositories, and other environments. This architecture was the subject of a
+Second, DVC can be used to support model training on cloud GPUs, particularly as
+a tool for pushing and pulling files (such as datasets and trained models)
+between cloud computing instances, DVC repositories, and other environments.
+This architecture was the subject of a
 [recent blog by Marcel Mikl and Bert Besser](https://blog.codecentric.de/en/2020/01/remote-training-gitlab-ci-dvc/).
 Their report describes the cloud computing setup and continuous integration
 pipeline quite well.
