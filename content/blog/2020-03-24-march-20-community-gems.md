@@ -13,7 +13,6 @@ tags:
   - Discord
   - Tags
   - Gems
-  - RBAC
   - Data registry
 ---
 
@@ -23,7 +22,7 @@ Here are some Q&A's from our Discord channel that we think are worth sharing.
 
 ### Q: I have several simulations organized with Git tags. I know I can compare the metrics with `dvc metrics diff [a_rev] [b_rev]`, substituting hashes, branches, or tags for [a_rev] and [b_rev]. [But what if I wanted to see the metrics for a list of tags?](https://discordapp.com/channels/485586884165107732/563406153334128681/687634347104403528)
 
-DVC has a built in function for this! You can use
+DVC has a built in function for this! You can use `dvc metrics show` with the `-T` option:
 
 ```dvc
 $ dvc metrics show -T
@@ -56,7 +55,7 @@ This is a consequence of new support we've added for monorepos with the
 `dvc init --subdir` functionality
 ([see more here](https://dvc.org/doc/command-reference/init#init)), which lets
 there be multiple DVC projects within a single Git repository. Now, if a DVC
-repository doesn't contain a `.git` directory, DVC expects the `no-scm` flag to
+repository doesn't contain a `.git` directory, DVC expects the `no_scm` flag to
 be present in `.dvc/config` and raises an error if not. For example, one of our
 users reported this when using DVC to pull files into a Docker container that
 didn't have Git initialized.
@@ -70,13 +69,14 @@ We are currently working to
 [add graceful error-handling](https://github.com/iterative/dvc/issues/3474) for
 this particular issue so stay tuned.
 
-### Q: In my workflow, I need to periodically update the dataset in my local environment and then retrain my model. [Is there a way to force the pipeline to rerun, even if its dependencies haven't changed (i.e., their MD5 hashes are unmodified)?](https://discordapp.com/channels/485586884165107732/563406153334128681/687422002822381609)
+### Q: [Is there a way to force the pipeline to rerun, even if its dependencies haven't changed?](https://discordapp.com/channels/485586884165107732/563406153334128681/687422002822381609)
 
 Yes, `dvc repro` has a flag that should help here. You can use the `-f` or
 `--force` flag to reproduce the pipeline even when no changes in the
-dependencies have been found. So if you had a hypoethetical DVC pipeline whose
+dependencies (for example, a training datset tracked by DVC) have been found. 
+So if you had a hypoethetical DVC pipeline whose
 final process was `deploy.dvc`, you could run `dvc repro -f deploy.dvc` to rerun
-the whole pipeline, even if the dataset hasn't changed.
+the whole pipeline.
 
 ### Q: What's the best way to orgnize DVC repositories if I have several training datasets shared by several projects? Some projects use only one dataset while other use several. [Can one project have `.dvc` files corresponding to different remotes?](https://discordapp.com/channels/485586884165107732/563406153334128681/670664813973864449)
 
@@ -112,16 +112,15 @@ references aren't yet solidified. So while there isn't (_yet_) a standard recipe
 for using DVC in MLOps projects, we can point you to a few architectures we
 like, and which have been reported in sufficient detail to recreate.
 
-First, DVC can be used to trigger feedback in a CI/CD system (for example, model
-retraining) when datasets change; this is an example of continuous delivery for
-ML. For more about this architecture, please check out this excellent and
-thorough
-[blog by Danilo Sato et al.](https://martinfowler.com/articles/cd4ml.html).
+First, DVC can be used to detect events (such as dataset changes) in a CI/CD 
+system that traditional version control systems might not be able to.  
+An excellent and thorough [blog by Danilo Sato et al.](https://martinfowler.com/articles/cd4ml.html)
+explores using DVC in this way, as part of a CI/CD system that retrains a model
+automatically when changes in the dataset are detected. 
 
-Second, DVC can be used to trigger model training on cloud GPUs, including
-launching cloud computing instances, deploying containers configured with the
-training environment, and adding the resulting model files to a DVC repository.
-This architecture was the subject of a
+Second, DVC can be used to support model training on cloud GPUs, particularly as a tool
+for pushing and pulling files (such as datasets and trained models) between cloud computing instances,
+DVC repositories, and other environments. This architecture was the subject of a
 [recent blog by Marcel Mikl and Bert Besser](https://blog.codecentric.de/en/2020/01/remote-training-gitlab-ci-dvc/).
 Their report describes the cloud computing setup and continuous integration
 pipeline quite well.
