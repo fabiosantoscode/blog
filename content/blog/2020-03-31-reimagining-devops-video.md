@@ -28,7 +28,7 @@ practices in the age of machine learning. It's got a focus on
 workflows that we think can streamline exchanges between data scientists and
 software engineers. And, it's got fuzzy animals. Check it out here:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/0MDrZpO_7Q4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://youtu.be/0MDrZpO_7Q4
 
 If you liked this, you'll also want to check out the next talk in the DivOps
 playlist by
