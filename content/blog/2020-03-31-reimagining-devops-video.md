@@ -4,7 +4,11 @@ date: 2020-03-31
 description: |
   A talk about CI/CD with fuzzy animals.
 descriptionLong: |
-  A talk about CI/CD with fuzzy animals.
+  As machine learning matures, we need to find better ways to 
+  integrate data science with software development. In this talk
+  for DivOps, a conference about the future of DevOps, DVC data 
+  scientist Elle O'Brien discusses how CI/CD can adapt to
+  machine learning. This is MLOps, explained with fuzzy animals.
 picture: ../../static/uploads/images/2020-03-31/cover_image.png
 author: ../authors/elle_obrien.md
 commentsUrl: https://discuss.dvc.org/t/new-video-reimagining-devops-for-machine-learning/341
@@ -20,7 +24,8 @@ discipline bringing together strong software engineering practices with speedy
 development cycles. As machine learning is finding its way into just about
 _every_ area of research and development, we're going to need to come up with
 some conventions and tools for integrating machine learning and big data with
-software development.
+software development. This growing field is called
+[MLOps](https://towardsdatascience.com/the-rise-of-the-term-mlops-3b14d5bd1bdb).
 
 I gave a lightning talk about how we'll have to rethink our software development
 practices in the age of machine learning. It's got a focus on
