@@ -7,7 +7,7 @@ descriptionLong: |
   A talk about CI/CD with fuzzy animals.
 picture: ../../static/uploads/images/2020-03-31/cover_image.png
 author: ../authors/elle_obrien.md
-commentsUrl: https://discuss.dvc.org/t/march-20-community-gems/336
+commentsUrl: https://discuss.dvc.org/t/new-video-reimagining-devops-for-machine-learning/341
 tags:
   - CI/CD
   - DevOps
